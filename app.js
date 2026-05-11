@@ -453,6 +453,12 @@ function ensureExtension(name, ext) {
   return `${safe}.${ext}`;
 }
 
+function stripKnownOutputExt(name) {
+  const s = String(name || '').trim();
+  if (!s) return '';
+  return s.replace(/\.(kml|gpx)$/i, '');
+}
+
 function currentDownloadConfig() {
   const fmt = els.formatSelect?.value === 'gpx' ? 'gpx' : 'kml';
   if (fmt === 'gpx') {
@@ -462,13 +468,17 @@ function currentDownloadConfig() {
 }
 
 function sanitizeFilename(name) {
-  const cfg = currentDownloadConfig();
-  return ensureExtension(name, cfg.ext);
+  // Keep the input as a base name (no .kml/.gpx shown).
+  const s = stripKnownOutputExt(name);
+  return String(s || '')
+    .trim()
+    .replace(/[<>:\"/\\\\|?*\\x00-\\x1F]/g, '_')
+    .replace(/\\s+/g, ' ');
 }
 
 function syncDownloadUi() {
-  const cfg = currentDownloadConfig();
-  els.outName.value = ensureExtension(els.outName.value, cfg.ext);
+  // Don't auto-append extensions in the input; we add it only on download.
+  els.outName.value = sanitizeFilename(els.outName.value);
 }
 
 function setHowToOpen(open) {
@@ -596,7 +606,7 @@ window.addEventListener('keydown', (e) => {
 els.downloadBtn.addEventListener('click', () => {
   try {
     const cfg = currentDownloadConfig();
-    const filename = ensureExtension(els.outName.value, cfg.ext);
+    const filename = ensureExtension(sanitizeFilename(els.outName.value), cfg.ext);
 
     if (cfg.fmt === 'gpx') {
       const { gpx, kept, skipped } = buildGpx();
