@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KML / GPX Converter</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <div>
+          <h1>KML / GPX Converter</h1>
+        </div>
+      </header>
+
+      <main class="grid">
+        <section class="card">
+          <h2>1) Upload file</h2>
+          <label class="file">
+            <input id="fileInput" type="file" accept=".xlsx,.xls,.csv,.txt" />
+            <span>Choose .xlsx/.xls/.csv/.txt</span>
+          </label>
+          <div id="fileMeta" class="meta"></div>
+          <div id="status" class="status" role="status" aria-live="polite"></div>
+          <p class="status subtle runsNote">Runs entirely in your browser. Your file is not uploaded anywhere.</p>
+        </section>
+
+        <section class="card">
+          <h2>2) Map columns</h2>
+          <div class="row">
+            <label>
+              <span>Latitude</span>
+              <select id="latSelect" disabled></select>
+            </label>
+            <label>
+              <span>Longitude</span>
+              <select id="lngSelect" disabled></select>
+            </label>
+          </div>
+          <div class="row">
+            <label>
+              <span>Name (optional)</span>
+              <select id="nameSelect" disabled></select>
+            </label>
+            <label>
+              <span>Description (optional)</span>
+              <select id="descSelect" disabled></select>
+            </label>
+          </div>
+
+          <div class="row">
+            <label class="wide">
+              <span>Folder name (optional)</span>
+              <input id="folderName" type="text" placeholder="e.g. My Points" disabled />
+            </label>
+          </div>
+
+          <details class="advanced" id="advancedDetails">
+            <summary>Advanced</summary>
+            <div class="row">
+              <label class="wide">
+                <span>Sheet</span>
+                <select id="sheetSelect" disabled></select>
+              </label>
+            </div>
+            <div class="row">
+              <label class="wide">
+                <span>Header row</span>
+                <input id="headerRow" type="number" min="1" step="1" value="1" disabled />
+              </label>
+            </div>
+          </details>
+        </section>
+
+        <section class="card">
+          <h2>3) Download</h2>
+          <div class="row">
+            <label class="wide">
+              <span>Format</span>
+              <select id="formatSelect" disabled>
+                <option value="kml">KML (Google Earth / Maps)</option>
+                <option value="gpx">GPX (OsmAnd)</option>
+              </select>
+            </label>
+          </div>
+          <div class="row">
+            <label class="wide">
+              <span>Output filename</span>
+              <input id="outName" type="text" value="points.kml" disabled />
+            </label>
+          </div>
+          <div class="row">
+            <button id="downloadBtn" class="primary" disabled>Download</button>
+            <button id="previewBtn" class="ghost" disabled>Preview first 5 points</button>
+          </div>
+          <div id="preview" class="preview" hidden></div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <div class="footerRow">
+          <button id="howToBtn" class="ghost howToFloating" type="button">How to use</button>
+        </div>
+      </footer>
+    </div>
+
+    <div id="howToModal" class="modalOverlay" hidden aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="howToTitle">
+        <div class="modalHeader">
+          <h2 id="howToTitle">How to use</h2>
+          <button id="howToClose" class="iconBtn" type="button" aria-label="Close">✕</button>
+        </div>
+        <div class="modalBody">
+          <ol class="steps">
+            <li>
+              <b>Upload file</b>
+              <div class="subtle">Choose <code>.xlsx</code>, <code>.xls</code>, <code>.csv</code>, or <code>.txt</code>.</div>
+            </li>
+            <li>
+              <b>Map columns</b>
+              <div class="subtle">
+                Select your <b>Latitude</b> and <b>Longitude</b> columns. Optionally select <b>Name</b> and
+                <b>Description</b>.
+              </div>
+              <div class="subtle" style="margin-top: 6px">
+                <b>Folder name</b> (optional): only affects <b>KML</b>. If set, points are grouped inside a KML folder with that name.
+                <b>GPX</b> (OsmAnd) ignores it.
+              </div>
+            </li>
+            <li>
+              <b>Choose output format</b>
+              <div class="subtle">
+                <b>KML</b> works with Google Earth / Maps. <b>GPX</b> is a good choice for OsmAnd.
+              </div>
+            </li>
+            <li>
+              <b>Download</b>
+              <div class="subtle">
+                Click <b>Download</b>. Rows with invalid coordinates are skipped.
+              </div>
+            </li>
+          </ol>
+
+          <hr class="sep" />
+
+          <div class="infoGrid">
+            <div>
+              <b>TXT/CSV auto-detect</b>
+              <div class="subtle">
+                For <code>.txt</code>/<code>.csv</code>, the app tries to find the best latitude/longitude pair even if the line has extra mixed data.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modalFooter">
+          <button id="howToOk" class="primary" type="button">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SheetJS (XLSX) for Excel parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,272 @@
+:root {
+  --bg: #0b1020;
+  --panel: rgba(255, 255, 255, 0.06);
+  --panel2: rgba(255, 255, 255, 0.08);
+  --text: rgba(255, 255, 255, 0.92);
+  --muted: rgba(255, 255, 255, 0.68);
+  --border: rgba(255, 255, 255, 0.12);
+  --focus: rgba(123, 92, 255, 0.55);
+  --accent: #7b5cff;
+  --accent2: #2dd4bf;
+  --danger: #fb7185;
+  --ok: #34d399;
+  --shadow: 0 14px 50px rgba(0, 0, 0, 0.35);
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  color: var(--text);
+  overflow-x: hidden;
+  background:
+    radial-gradient(1000px 650px at 10% 10%, rgba(123, 92, 255, 0.22), transparent 55%),
+    radial-gradient(900px 550px at 80% 20%, rgba(45, 212, 191, 0.16), transparent 55%),
+    linear-gradient(180deg, #070a14, var(--bg));
+}
+
+.app { max-width: 100%; margin: 0 auto; padding: clamp(16px, 2.4vw, 28px) clamp(12px, 2vw, 18px) 56px; }
+.header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 18px; }
+h1 { margin: 0 0 6px; font-size: clamp(20px, 2.6vw, 28px); letter-spacing: 0.2px; }
+.subtle { margin: 0; color: var(--muted); line-height: 1.45; }
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.95em;
+  padding: 0.12em 0.35em;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.card {
+  grid-column: span 12;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: clamp(12px, 1.4vw, 16px);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+}
+
+@media (min-width: 900px) {
+  /* Give the Download card enough room */
+  /* Use nth-of-type so non-card elements (like the note) don't shift layout */
+  section.card:nth-of-type(1) { grid-column: span 4; }
+  section.card:nth-of-type(2) { grid-column: span 4; }
+  section.card:nth-of-type(3) { grid-column: span 4; }
+}
+
+h2 { margin: 0 0 12px; font-size: 16px; color: rgba(255,255,255,0.9); }
+
+.row { display: flex; gap: 12px; align-items: flex-end; margin-top: 12px; flex-wrap: wrap; }
+label { display: grid; gap: 6px; min-width: 180px; }
+label.wide { flex: 1 1 280px; min-width: 240px; }
+label > span { font-size: 12px; color: var(--muted); }
+
+input[type="text"], input[type="number"], select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--panel2);
+  color: var(--text);
+  outline: none;
+  color-scheme: dark;
+}
+
+/* Make <select> option list readable on dark UI (browser-dependent). */
+select option,
+select optgroup {
+  background-color: #0b1020;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+input:focus, select:focus {
+  border-color: rgba(123, 92, 255, 0.65);
+  box-shadow: 0 0 0 3px var(--focus);
+}
+
+input[disabled], select[disabled], button[disabled] { opacity: 0.55; cursor: not-allowed; }
+
+.file {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.04);
+}
+.file input { display: none; }
+
+button {
+  border: 1px solid var(--border);
+  background: var(--panel2);
+  color: var(--text);
+  padding: 10px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+button.primary {
+  background: linear-gradient(135deg, rgba(123, 92, 255, 0.92), rgba(45, 212, 191, 0.75));
+  border-color: rgba(255, 255, 255, 0.18);
+}
+button.ghost { background: transparent; }
+
+/* Bottom-left "How to use" button */
+.howToFloating {
+  position: fixed;
+  left: clamp(10px, 1.6vw, 14px);
+  bottom: clamp(10px, 1.6vw, 14px);
+  z-index: 900;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+
+
+.meta { margin-top: 10px; color: var(--muted); font-size: 12px; }
+.status { margin-top: 10px; font-size: 12px; }
+.status.ok { color: var(--ok); }
+.status.bad { color: var(--danger); }
+
+/* Ensure the privacy note matches status sizing without extra gaps */
+.runsNote { margin-top: 6px; }
+
+.advanced { margin-top: 12px; }
+.advanced summary { color: var(--muted); cursor: pointer; user-select: none; }
+.advanced[open] { padding-top: 8px; }
+
+.preview {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(0,0,0,0.35);
+  max-height: 260px;
+  overflow: auto;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.preview { overflow-x: hidden; }
+
+.previewTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.previewTable th,
+.previewTable td {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+  vertical-align: top;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+.previewTable th {
+  position: sticky;
+  top: 0;
+  background: rgba(0,0,0,0.35);
+  text-align: left;
+  color: rgba(255,255,255,0.82);
+}
+.previewTable td {
+  color: rgba(255,255,255,0.88);
+}
+.previewEmpty {
+  color: var(--muted);
+}
+
+.footer { margin-top: 16px; }
+.footerRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.modalOverlay[hidden] { display: none; }
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  z-index: 1000;
+}
+.modal {
+  width: min(720px, calc(100vw - 24px));
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: rgba(15, 18, 34, 0.92);
+  box-shadow: 0 20px 70px rgba(0,0,0,0.55);
+  backdrop-filter: blur(12px);
+}
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 14px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+}
+.modalHeader h2 { margin: 0; font-size: 16px; }
+.modalBody {
+  padding: 12px 14px 6px;
+  max-height: calc(100vh - 180px);
+  overflow: auto;
+}
+.modalFooter {
+  padding: 10px 14px 14px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  border-top: 1px solid rgba(255,255,255,0.10);
+}
+.iconBtn {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  cursor: pointer;
+}
+.iconBtn:hover { background: rgba(255,255,255,0.10); }
+
+.steps {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 10px;
+}
+.steps li b { color: rgba(255,255,255,0.92); }
+.sep {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.10);
+  margin: 14px 0;
+}
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+.infoGrid > :only-child {
+  grid-column: 1 / -1;
+}
+@media (min-width: 720px) {
+  .infoGrid { grid-template-columns: 1fr 1fr; }
+}
